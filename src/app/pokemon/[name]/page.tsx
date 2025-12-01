@@ -93,9 +93,9 @@ export default async function PokemonPage({ params }: { params: { name: string }
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1 py-10">
-        <div className="container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
 
-          <div className="flex flex-col gap-8 lg:col-span-2">
+          <div className="flex flex-col gap-8 lg:col-span-3">
             <Card>
               <CardHeader>
                 <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -180,7 +180,7 @@ export default async function PokemonPage({ params }: { params: { name: string }
             </div>
           </div>
           
-          <Card className="flex flex-col">
+          <Card className="flex flex-col lg:col-span-2">
               <CardHeader>
                 <CardTitle>3D Model</CardTitle>
                 <CardDescription>Drag to rotate the model</CardDescription>
