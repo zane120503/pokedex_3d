@@ -66,10 +66,17 @@ const Pokemon3DViewer = () => {
     const onMouseUp = () => {
         isDragging = false;
     };
+
+    const onWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      camera.position.z += event.deltaY * 0.01;
+      camera.position.z = Math.max(2, Math.min(10, camera.position.z));
+    }
     
     currentMount.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
+    currentMount.addEventListener('wheel', onWheel);
 
     const animate = () => {
       if (!isMounted) return;
@@ -96,6 +103,7 @@ const Pokemon3DViewer = () => {
       currentMount.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
+      currentMount.removeEventListener('wheel', onWheel);
       if(renderer.domElement.parentElement === currentMount) {
         currentMount.removeChild(renderer.domElement);
       }
