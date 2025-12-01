@@ -1,17 +1,80 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { allPokemon } from '@/lib/data';
-import type { Pokemon } from '@/lib/types';
+import type { Pokemon, Evolution } from '@/lib/types';
 import { Header } from '@/components/header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { TypeBadge } from '@/components/type-badge';
 import Pokemon3DViewer from '@/components/pokemon-3d-viewer';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ChevronRight } from 'lucide-react';
 
 async function getPokemonByName(name: string): Promise<Pokemon | undefined> {
   return allPokemon.find(p => p.name.toLowerCase() === name.toLowerCase());
 }
+
+function EvolutionCard({ pokemon }: { pokemon: Pokemon }) {
+    const placeholder = PlaceHolderImages.find(p => p.id === pokemon.image2d);
+    return (
+        <Link href={`/pokemon/${pokemon.name.toLowerCase()}`} className="group block">
+            <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
+                <CardContent className="p-4 flex items-center gap-4">
+                    {placeholder && (
+                        <div className="relative h-16 w-16 shrink-0">
+                            <Image
+                                src={placeholder.imageUrl}
+                                alt={pokemon.name}
+                                fill
+                                sizes="64px"
+                                data-ai-hint={placeholder.imageHint}
+                                className="object-contain transition-transform duration-300 group-hover:scale-110"
+                            />
+                        </div>
+                    )}
+                    <div>
+                        <p className="text-sm font-medium text-muted-foreground">#{String(pokemon.id).padStart(4, '0')}</p>
+                        <h3 className="text-lg font-bold capitalize text-primary">{pokemon.name}</h3>
+                    </div>
+                </CardContent>
+            </Card>
+        </Link>
+    );
+}
+
+function getFullEvolutionChain(pokemon: Pokemon): Pokemon[] {
+    if (!pokemon.previousEvolution && !pokemon.evolutions) {
+        return [pokemon];
+    }
+    
+    let currentPokemon = pokemon;
+    // Find the start of the chain
+    while (currentPokemon.previousEvolution) {
+        const prev = allPokemon.find(p => p.id === currentPokemon.previousEvolution!.id);
+        if (prev) {
+            currentPokemon = prev;
+        } else {
+            break;
+        }
+    }
+
+    const chain: Pokemon[] = [currentPokemon];
+    // Build the chain forward
+    while (currentPokemon.evolutions && currentPokemon.evolutions.length > 0) {
+        // For simplicity, we'll just follow the first evolution path if there are multiple (like Eevee)
+        const next = allPokemon.find(p => p.id === currentPokemon.evolutions![0].id);
+        if (next) {
+            chain.push(next);
+            currentPokemon = next;
+        } else {
+            break;
+        }
+    }
+
+    return chain;
+}
+
 
 export default async function PokemonPage({ params }: { params: { name: string } }) {
   const pokemon = await getPokemonByName(params.name);
@@ -22,6 +85,8 @@ export default async function PokemonPage({ params }: { params: { name: string }
   
   const placeholder = PlaceHolderImages.find(p => p.id === pokemon.image2d);
   const maxStat = 255; 
+
+  const evolutionChain = getFullEvolutionChain(pokemon);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -59,6 +124,26 @@ export default async function PokemonPage({ params }: { params: { name: string }
                 <p className="text-lg">{pokemon.description}</p>
               </CardContent>
             </Card>
+
+            {evolutionChain.length > 1 && (
+                <Card>
+                    <CardHeader><CardTitle>Evolution Chain</CardTitle></CardHeader>
+                    <CardContent>
+                        <div className="flex flex-wrap items-center gap-4">
+                            {evolutionChain.map((evo, index) => (
+                                <React.Fragment key={evo.id}>
+                                    <div className="w-full sm:w-auto sm:flex-1 min-w-[200px]">
+                                        <EvolutionCard pokemon={evo} />
+                                    </div>
+                                    {index < evolutionChain.length - 1 && (
+                                        <ChevronRight className="hidden h-8 w-8 text-muted-foreground sm:block" />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
                 <Card>

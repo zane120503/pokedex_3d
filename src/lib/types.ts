@@ -23,6 +23,11 @@ export type PokemonStat = {
   value: number;
 };
 
+export type Evolution = {
+  id: number;
+  name: string;
+}
+
 export type Pokemon = {
   id: number;
   name: string;
@@ -33,4 +38,6 @@ export type Pokemon = {
   appearance: string;
   diet: string;
   image2d: string;
+  evolutions?: Evolution[];
+  previousEvolution?: Evolution;
 };
