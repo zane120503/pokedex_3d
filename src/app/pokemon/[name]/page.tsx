@@ -2,7 +2,6 @@ import * as React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { allPokemon } from '@/lib/data';
 import type { Pokemon } from '@/lib/types';
 import { Header } from '@/components/header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -11,11 +10,11 @@ import { TypeBadge } from '@/components/type-badge';
 import Pokemon3DViewer from '@/components/pokemon-3d-viewer';
 import { PokemonCryButton } from '@/components/pokemon-cry-button';
 import { getArtworkUrl, getModelUrl } from '@/lib/pokemon-assets';
+import { getAllPokemon, getPokemonByName } from '@/lib/pokemon-repository';
 import { ChevronRight } from 'lucide-react';
 
-async function getPokemonByName(name: string): Promise<Pokemon | undefined> {
-  return allPokemon.find(p => p.name.toLowerCase() === name.toLowerCase());
-}
+// Re-read Pokémon data from the database at most once a minute.
+export const revalidate = 60;
 
 function EvolutionCard({ pokemon }: { pokemon: Pokemon }) {
     return (
@@ -43,7 +42,7 @@ function EvolutionCard({ pokemon }: { pokemon: Pokemon }) {
 
 // Returns the evolution family grouped by stage, so branching evolutions
 // (e.g. Eevee -> Vaporeon / Jolteon / Flareon) are all shown.
-function getEvolutionStages(pokemon: Pokemon): Pokemon[][] {
+function getEvolutionStages(pokemon: Pokemon, allPokemon: Pokemon[]): Pokemon[][] {
     let root = pokemon;
     while (root.previousEvolution) {
         const prev = allPokemon.find(p => p.id === root.previousEvolution!.id);
@@ -74,7 +73,7 @@ export default async function PokemonPage({ params }: { params: Promise<{ name: 
   
   const maxStat = 255; 
 
-  const evolutionStages = getEvolutionStages(pokemon);
+  const evolutionStages = getEvolutionStages(pokemon, await getAllPokemon());
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -184,6 +183,7 @@ export default async function PokemonPage({ params }: { params: Promise<{ name: 
 }
 
 export async function generateStaticParams() {
+  const allPokemon = await getAllPokemon();
   return allPokemon.map(pokemon => ({
     name: pokemon.name.toLowerCase(),
   }));
