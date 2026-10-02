@@ -23,7 +23,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Overgrow", "Chlorophyll"],
     appearance: "Found in sunny grasslands and forests. It is often one of the first Pokémon given to new trainers in the Kanto region.",
     diet: "It absorbs nutrients from the seed on its back, but also eats small insects and berries.",
-    image2d: "bulbasaur",
     evolutions: [{ id: 2, name: "Ivysaur" }],
   },
   {
@@ -42,7 +41,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Overgrow", "Chlorophyll"],
     appearance: "The bulb on its back blossoms when it absorbs enough nutrition. The bulb gives off a sweet scent.",
     diet: "Like Bulbasaur, it primarily gets energy from its bulb, but will supplement with bugs.",
-    image2d: "ivysaur",
     previousEvolution: { id: 1, name: "Bulbasaur" },
     evolutions: [{ id: 3, name: "Venusaur" }],
   },
@@ -62,7 +60,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Overgrow", "Chlorophyll"],
     appearance: "A large flower on its back is said to take on vivid colors if it gets plenty of nutrition and sunlight.",
     diet: "It is able to convert sunlight into energy, but still enjoys eating fruits.",
-    image2d: "venusaur",
     previousEvolution: { id: 2, name: "Ivysaur" },
   },
   {
@@ -81,7 +78,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Blaze", "Solar Power"],
     appearance: "Prefers hot, mountainous areas. The flame on its tail indicates its life force.",
     diet: "Primarily carnivorous, hunting small insects and lizards.",
-    image2d: "charmander",
     evolutions: [{ id: 5, name: "Charmeleon" }],
   },
   {
@@ -100,7 +96,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Blaze", "Solar Power"],
     appearance: "It is very hot-headed and seeks out opponents. It calms down only when it wins.",
     diet: "It is a more aggressive hunter than Charmander, often tackling larger prey.",
-    image2d: "charmeleon",
     previousEvolution: { id: 4, name: "Charmander" },
     evolutions: [{ id: 6, name: "Charizard" }],
   },
@@ -120,7 +115,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Blaze", "Solar Power"],
     appearance: "It is said that Charizard's fire burns hotter if it has experienced harsh battles.",
     diet: "A powerful predator, it can hunt large animals and even other Pokémon.",
-    image2d: "charizard",
     previousEvolution: { id: 5, name: "Charmeleon" },
   },
   {
@@ -139,7 +133,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Torrent", "Rain Dish"],
     appearance: "Commonly found in freshwater ponds and small lakes. Its shell provides excellent protection.",
     diet: "Omnivorous, feeding on algae, small fish, and aquatic plants.",
-    image2d: "squirtle",
     evolutions: [{ id: 8, name: "Wartortle" }],
   },
   {
@@ -158,7 +151,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Torrent", "Rain Dish"],
     appearance: "Often found near water. Its large tail is covered with a rich, thick fur that deepens in color with age.",
     diet: "It actively hunts for fish and other small aquatic creatures.",
-    image2d: "wartortle",
     previousEvolution: { id: 7, name: "Squirtle" },
     evolutions: [{ id: 9, name: "Blastoise" }],
   },
@@ -178,7 +170,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Torrent", "Rain Dish"],
     appearance: "The water spouts on its back are incredibly accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.",
     diet: "It is a capable hunter, but its diet is still primarily based on aquatic plants and fish.",
-    image2d: "blastoise",
     previousEvolution: { id: 8, name: "Wartortle" },
   },
   {
@@ -197,7 +188,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Static", "Lightning Rod"],
     appearance: "Lives in forests. It raises its tail to check its surroundings and is sometimes struck by lightning in this pose.",
     diet: "Feeds on berries, which it roasts with electricity to make them tender.",
-    image2d: "pikachu",
     evolutions: [{ id: 26, name: "Raichu" }],
   },
   {
@@ -216,7 +206,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Static", "Lightning Rod"],
     appearance: "Its electric charges can reach up to 100,000 volts. Careless contact can cause even an Indian elephant to faint.",
     diet: "It continues to eat berries, but its powerful electricity allows it to cook them instantly.",
-    image2d: "raichu",
     previousEvolution: { id: 25, name: "Pikachu" },
   },
   {
@@ -235,7 +224,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Cute Charm", "Competitive"],
     appearance: "Found in grassy fields and meadows. It captivates foes with its large, expressive eyes.",
     diet: "Enjoys eating sweet fruits and Puff-Puffs, a type of Pokémon snack.",
-    image2d: "jigglypuff",
     evolutions: [{ id: 40, name: "Wigglytuff" }],
   },
   {
@@ -254,7 +242,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Cute Charm", "Competitive"],
     appearance: "Its fur is the ultimate in luxury. Sleeping alongside a Wigglytuff is simply divine.",
     diet: "Its diet remains the same, consisting of sweet fruits and snacks.",
-    image2d: "wigglytuff",
     previousEvolution: { id: 39, name: "Jigglypuff" },
   },
   {
@@ -273,7 +260,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Pickup", "Technician"],
     appearance: "A nocturnal Pokémon that is often found in urban environments. It is drawn to shiny objects.",
     diet: "An opportunistic omnivore, eating anything from scraps to small Pokémon.",
-    image2d: "meowth",
     evolutions: [{ id: 53, name: "Persian" }],
   },
   {
@@ -292,7 +278,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Limber", "Technician"],
     appearance: "A very proud Pokémon, it will scratch anyone, including its Trainer, for little to no reason.",
     diet: "It is a much more refined hunter than Meowth, stalking prey with grace and stealth.",
-    image2d: "persian",
     previousEvolution: { id: 52, name: "Meowth" },
   },
   {
@@ -311,7 +296,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Damp", "Cloud Nine"],
     appearance: "Lives in freshwater lakes and rivers. Is constantly afflicted by a headache.",
     diet: "Forages for fish and edible plants near the water's edge.",
-    image2d: "psyduck",
     evolutions: [{ id: 55, name: "Golduck" }],
   },
   {
@@ -330,7 +314,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Damp", "Cloud Nine"],
     appearance: "This Pokémon is a faster swimmer than any human champion. It is found in lakes and rivers.",
     diet: "A skilled swimmer, it preys on fish Pokémon in rivers and lakes.",
-    image2d: "golduck",
     previousEvolution: { id: 54, name: "Psyduck" },
   },
     {
@@ -349,7 +332,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Guts", "No Guard"],
     appearance: "Found in mountainous regions and caves, where it rigorously trains by lifting boulders.",
     diet: "Requires a high-protein diet to maintain its muscle mass, often eating protein-rich plants and eggs.",
-    image2d: "machop",
     evolutions: [{ id: 67, name: "Machoke" }],
   },
   {
@@ -368,7 +350,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Guts", "No Guard"],
     appearance: "It can be found in the wild, but is more often seen in the company of humans, helping with heavy labor.",
     diet: "Its diet is similar to Machop's, but it requires an even greater caloric intake to fuel its muscles.",
-    image2d: "machoke",
     previousEvolution: { id: 66, name: "Machop" },
     evolutions: [{ id: 68, name: "Machamp" }],
   },
@@ -388,7 +369,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Guts", "No Guard"],
     appearance: "With four arms that react faster than it can think, it can execute many punches at once.",
     diet: "It has a voracious appetite and will eat large quantities of food to maintain its energy.",
-    image2d: "machamp",
     previousEvolution: { id: 67, name: "Machoke" },
   },
   {
@@ -407,7 +387,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Rock Head", "Sturdy"],
     appearance: "Commonly seen along mountain trails. It levitates slightly above the ground.",
     diet: "It consumes rocks and minerals, showing a preference for rocks covered in moss.",
-    image2d: "geodude",
     evolutions: [{ id: 75, name: "Graveler" }],
   },
   {
@@ -426,7 +405,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Rock Head", "Sturdy"],
     appearance: "Lives on mountains. It has a tendency to roll down mountainsides, causing rockslides.",
     diet: "It eats rocks, preferring those with plenty of moss and lichen.",
-    image2d: "graveler",
     previousEvolution: { id: 74, name: "Geodude" },
     evolutions: [{ id: 76, name: "Golem" }],
   },
@@ -446,7 +424,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Rock Head", "Sturdy"],
     appearance: "Its boulder-like body is extremely hard. It is capable of withstanding powerful blasts without taking damage.",
     diet: "It feeds on minerals, sometimes venturing into towns to lick the walls of houses.",
-    image2d: "golem",
     previousEvolution: { id: 75, name: "Graveler" },
   },
   {
@@ -465,7 +442,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Magnet Pull", "Sturdy"],
     appearance: "Often found near power plants and other areas with strong magnetic fields. They are known to cause blackouts.",
     diet: "Feeds on electricity. It can be found attached to power lines, draining energy.",
-    image2d: "magnemite",
     evolutions: [{ id: 82, name: "Magneton" }],
   },
   {
@@ -484,7 +460,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Magnet Pull", "Sturdy"],
     appearance: "Generates a powerful magnetic field that can damage electronic equipment. They often appear in swarms.",
     diet: "It continues to feed on electricity, often in greater quantities than Magnemite.",
-    image2d: "magneton",
     previousEvolution: { id: 81, name: "Magnemite" },
   },
   {
@@ -503,7 +478,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Cursed Body"],
     appearance: "Hides in the shadows of rooms, corners, and dark alleys. It is said that Gengar is the cause of any sudden chills.",
     diet: "It is said to steal the life force of its victims. It does not eat in a conventional sense.",
-    image2d: "gengar",
   },
   {
     id: 133,
@@ -521,7 +495,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Run Away", "Adaptability"],
     appearance: "Rarely found in the wild, most Eevee live in cities and towns with their trainers. Its unstable genetics allow it to evolve in many different ways.",
     diet: "A simple diet of Pokémon food and berries. Its diet can influence its evolutionary path.",
-    image2d: "eevee",
     evolutions: [
       { id: 134, name: "Vaporeon" },
       { id: 135, name: "Jolteon" },
@@ -540,7 +513,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Water Absorb", "Hydration"],
     appearance: "Lives near clean water. Its body is capable of melting into water, making it difficult to spot.",
     diet: "Absorbs water into its body. It can also hunt for fish.",
-    image2d: "vaporeon",
     previousEvolution: { id: 133, name: "Eevee" },
   },
   {
@@ -555,7 +527,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Volt Absorb", "Quick Feet"],
     appearance: "Its fur is made of electrically charged needles. It can bristle its fur to attack.",
     diet: "It generates its own electricity, but it may also absorb static electricity from the air.",
-    image2d: "jolteon",
     previousEvolution: { id: 133, name: "Eevee" },
   },
   {
@@ -570,7 +541,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Flash Fire", "Guts"],
     appearance: "Its fluffy fur has a functional purpose—it releases heat into the air so that its body does not get excessively hot.",
     diet: "It has a fiery nature and enjoys eating spicy foods.",
-    image2d: "flareon",
     previousEvolution: { id: 133, name: "Eevee" },
   },
   {
@@ -589,7 +559,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Immunity", "Thick Fat"],
     appearance: "Often found sleeping in inconvenient locations like roads and rivers. It only wakes up to eat.",
     diet: "Will eat anything. Its stomach can digest even moldy or rotten food without issue. It needs to eat 900 lbs. of food per day.",
-    image2d: "snorlax",
   },
   {
     id: 149,
@@ -607,7 +576,6 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Inner Focus", "Multiscale"],
     appearance: "Said to live in the sea. It is a kindhearted Pokémon that leads lost ships to safety.",
     diet: "Omnivorous, but has a strong preference for rare, sweet-tasting berries.",
-    image2d: "dragonite",
   },
   {
     id: 150,
@@ -625,6 +593,5 @@ export const allPokemon: Pokemon[] = [
     abilities: ["Pressure", "Unnerve"],
     appearance: "A genetically engineered Pokémon, it was designed to be the ultimate fighting machine. It rests in dark caves, conserving its energy for battle.",
     diet: "Does not need to eat, as it was created to sustain itself on psychic energy.",
-    image2d: "mewtwo",
   },
 ];

@@ -37,7 +37,6 @@ export type Pokemon = {
   abilities: string[];
   appearance: string;
   diet: string;
-  image2d: string;
   evolutions?: Evolution[];
   previousEvolution?: Evolution;
 };
