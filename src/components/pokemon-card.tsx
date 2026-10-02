@@ -4,6 +4,7 @@ import type { Pokemon } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TypeBadge } from '@/components/type-badge';
 import { getArtworkUrl } from '@/lib/pokemon-assets';
+import { getPokemonSlug } from '@/lib/data';
 
 type PokemonCardProps = {
   pokemon: Pokemon;
@@ -11,7 +12,7 @@ type PokemonCardProps = {
 
 export function PokemonCard({ pokemon }: PokemonCardProps) {
   return (
-    <Link href={`/pokemon/${pokemon.name.toLowerCase()}`} className="group block">
+    <Link href={`/pokemon/${getPokemonSlug(pokemon.name)}`} className="group block">
       <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1.5 hover:border-primary">
         <CardHeader className="items-center p-0 pt-6">
           <div className="relative h-36 w-36">

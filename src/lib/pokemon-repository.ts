@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { allPokemon as localPokemon } from './data';
+import { allPokemon as localPokemon, getPokemonSlug } from './data';
 import { getDb, isMongoConfigured } from './mongodb';
 import type { Pokemon } from './types';
 
@@ -28,7 +28,8 @@ export const getAllPokemon = cache(async (): Promise<Pokemon[]> => {
   }
 });
 
-export async function getPokemonByName(name: string): Promise<Pokemon | undefined> {
+// Looks a Pokémon up by its page slug, e.g. "nidoran-f" or "mr-mime".
+export async function getPokemonBySlug(slug: string): Promise<Pokemon | undefined> {
   const pokemon = await getAllPokemon();
-  return pokemon.find(p => p.name.toLowerCase() === name.toLowerCase());
+  return pokemon.find(p => getPokemonSlug(p.name) === decodeURIComponent(slug).toLowerCase());
 }

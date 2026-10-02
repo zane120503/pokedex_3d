@@ -23,9 +23,16 @@ export type PokemonStat = {
   value: number;
 };
 
+export type EvolutionTrigger = "level" | "item" | "trade" | "friendship";
+
 export type Evolution = {
   id: number;
   name: string;
+  // How the previous stage evolves into this one, e.g. "Level 16" or "Water Stone".
+  method?: string;
+  trigger?: EvolutionTrigger;
+  // PokeAPI item slug (e.g. "water-stone"), used to show the item's sprite.
+  item?: string;
 }
 
 export type Pokemon = {
