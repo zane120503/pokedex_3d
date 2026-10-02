@@ -1,8 +1,13 @@
 import { Header } from '@/components/header';
 import { PokemonClientPage } from '@/components/pokemon-client-page';
-import { allPokemon } from '@/lib/data';
+import { getAllPokemon } from '@/lib/pokemon-repository';
 
-export default function Home() {
+// Re-read the Pokémon list from the database at most once a minute.
+export const revalidate = 60;
+
+export default async function Home() {
+  const allPokemon = await getAllPokemon();
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
