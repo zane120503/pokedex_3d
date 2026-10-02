@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { TypeBadge } from '@/components/type-badge';
 import Pokemon3DViewer from '@/components/pokemon-3d-viewer';
+import { PokemonCryButton } from '@/components/pokemon-cry-button';
 import { getArtworkUrl, getModelUrl } from '@/lib/pokemon-assets';
 import { ChevronRight } from 'lucide-react';
 
@@ -90,6 +91,9 @@ export default async function PokemonPage({ params }: { params: Promise<{ name: 
                     <h1 className="text-5xl font-bold capitalize text-primary">{pokemon.name}</h1>
                     <div className="mt-4 flex gap-2">
                       {pokemon.types.map(type => <TypeBadge key={type} type={type} />)}
+                    </div>
+                    <div className="mt-4">
+                      <PokemonCryButton id={pokemon.id} name={pokemon.name} />
                     </div>
                   </div>
                   <div className="relative h-48 w-48 shrink-0">
