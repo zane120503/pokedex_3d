@@ -3,13 +3,13 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { allPokemon } from '@/lib/data';
-import type { Pokemon, Evolution } from '@/lib/types';
+import type { Pokemon } from '@/lib/types';
 import { Header } from '@/components/header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { TypeBadge } from '@/components/type-badge';
 import Pokemon3DViewer from '@/components/pokemon-3d-viewer';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getArtworkUrl, getModelUrl } from '@/lib/pokemon-assets';
 import { ChevronRight } from 'lucide-react';
 
 async function getPokemonByName(name: string): Promise<Pokemon | undefined> {
@@ -17,23 +17,19 @@ async function getPokemonByName(name: string): Promise<Pokemon | undefined> {
 }
 
 function EvolutionCard({ pokemon }: { pokemon: Pokemon }) {
-    const placeholder = PlaceHolderImages.find(p => p.id === pokemon.image2d);
     return (
         <Link href={`/pokemon/${pokemon.name.toLowerCase()}`} className="group block">
             <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
                 <CardContent className="p-4 flex items-center gap-4">
-                    {placeholder && (
-                        <div className="relative h-16 w-16 shrink-0">
-                            <Image
-                                src={placeholder.imageUrl}
-                                alt={pokemon.name}
-                                fill
-                                sizes="64px"
-                                data-ai-hint={placeholder.imageHint}
-                                className="object-contain transition-transform duration-300 group-hover:scale-110"
-                            />
-                        </div>
-                    )}
+                    <div className="relative h-16 w-16 shrink-0">
+                        <Image
+                            src={getArtworkUrl(pokemon.id)}
+                            alt={pokemon.name}
+                            fill
+                            sizes="64px"
+                            className="object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+                    </div>
                     <div>
                         <p className="text-sm font-medium text-muted-foreground">#{String(pokemon.id).padStart(4, '0')}</p>
                         <h3 className="text-lg font-bold capitalize text-primary">{pokemon.name}</h3>
@@ -44,50 +40,40 @@ function EvolutionCard({ pokemon }: { pokemon: Pokemon }) {
     );
 }
 
-function getFullEvolutionChain(pokemon: Pokemon): Pokemon[] {
-    if (!pokemon.previousEvolution && !pokemon.evolutions) {
-        return [pokemon];
-    }
-    
-    let currentPokemon = pokemon;
-    // Find the start of the chain
-    while (currentPokemon.previousEvolution) {
-        const prev = allPokemon.find(p => p.id === currentPokemon.previousEvolution!.id);
-        if (prev) {
-            currentPokemon = prev;
-        } else {
-            break;
-        }
+// Returns the evolution family grouped by stage, so branching evolutions
+// (e.g. Eevee -> Vaporeon / Jolteon / Flareon) are all shown.
+function getEvolutionStages(pokemon: Pokemon): Pokemon[][] {
+    let root = pokemon;
+    while (root.previousEvolution) {
+        const prev = allPokemon.find(p => p.id === root.previousEvolution!.id);
+        if (!prev) break;
+        root = prev;
     }
 
-    const chain: Pokemon[] = [currentPokemon];
-    // Build the chain forward
-    while (currentPokemon.evolutions && currentPokemon.evolutions.length > 0) {
-        // For simplicity, we'll just follow the first evolution path if there are multiple (like Eevee)
-        const next = allPokemon.find(p => p.id === currentPokemon.evolutions![0].id);
-        if (next) {
-            chain.push(next);
-            currentPokemon = next;
-        } else {
-            break;
-        }
+    const stages: Pokemon[][] = [];
+    let current: Pokemon[] = [root];
+    while (current.length > 0) {
+        stages.push(current);
+        current = current
+            .flatMap(p => p.evolutions ?? [])
+            .map(evo => allPokemon.find(p => p.id === evo.id))
+            .filter((p): p is Pokemon => p !== undefined);
     }
-
-    return chain;
+    return stages;
 }
 
 
-export default async function PokemonPage({ params }: { params: { name: string } }) {
-  const pokemon = await getPokemonByName(params.name);
+export default async function PokemonPage({ params }: { params: Promise<{ name: string }> }) {
+  const { name } = await params;
+  const pokemon = await getPokemonByName(name);
 
   if (!pokemon) {
     notFound();
   }
   
-  const placeholder = PlaceHolderImages.find(p => p.id === pokemon.image2d);
   const maxStat = 255; 
 
-  const evolutionChain = getFullEvolutionChain(pokemon);
+  const evolutionStages = getEvolutionStages(pokemon);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -106,19 +92,16 @@ export default async function PokemonPage({ params }: { params: { name: string }
                       {pokemon.types.map(type => <TypeBadge key={type} type={type} />)}
                     </div>
                   </div>
-                  {placeholder && (
-                    <div className="relative h-48 w-48 shrink-0">
-                      <Image
-                        src={placeholder.imageUrl}
-                        alt={pokemon.name}
-                        fill
-                        sizes="192px"
-                        data-ai-hint={placeholder.imageHint}
-                        className="object-contain"
-                        priority
-                      />
-                    </div>
-                  )}
+                  <div className="relative h-48 w-48 shrink-0">
+                    <Image
+                      src={getArtworkUrl(pokemon.id)}
+                      alt={pokemon.name}
+                      fill
+                      sizes="192px"
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -126,17 +109,17 @@ export default async function PokemonPage({ params }: { params: { name: string }
               </CardContent>
             </Card>
 
-            {evolutionChain.length > 1 && (
+            {evolutionStages.length > 1 && (
                 <Card>
                     <CardHeader><CardTitle>Evolution Chain</CardTitle></CardHeader>
                     <CardContent>
                         <div className="flex flex-wrap items-center gap-4">
-                            {evolutionChain.map((evo, index) => (
-                                <React.Fragment key={evo.id}>
-                                    <div className="w-full sm:w-auto sm:flex-1 min-w-[200px]">
-                                        <EvolutionCard pokemon={evo} />
+                            {evolutionStages.map((stage, index) => (
+                                <React.Fragment key={stage[0].id}>
+                                    <div className="flex w-full flex-col gap-4 sm:w-auto sm:flex-1 min-w-[200px]">
+                                        {stage.map(evo => <EvolutionCard key={evo.id} pokemon={evo} />)}
                                     </div>
-                                    {index < evolutionChain.length - 1 && (
+                                    {index < evolutionStages.length - 1 && (
                                         <ChevronRight className="hidden h-8 w-8 text-muted-foreground sm:block" />
                                     )}
                                 </React.Fragment>
@@ -183,10 +166,10 @@ export default async function PokemonPage({ params }: { params: { name: string }
           <Card className="flex flex-col lg:col-span-2">
               <CardHeader>
                 <CardTitle>3D Model</CardTitle>
-                <CardDescription>Drag to rotate the model</CardDescription>
+                <CardDescription>Drag to rotate, scroll or pinch to zoom</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-1 items-center justify-center">
-                <Pokemon3DViewer />
+                <Pokemon3DViewer key={pokemon.id} modelUrl={getModelUrl(pokemon.id)} name={pokemon.name} />
               </CardContent>
           </Card>
 
