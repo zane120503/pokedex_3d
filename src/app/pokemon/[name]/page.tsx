@@ -1,8 +1,6 @@
-import * as React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
-import type { Pokemon } from '@/lib/types';
+import { getPokemonSlug } from '@/lib/data';
 import { Header } from '@/components/header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -10,62 +8,15 @@ import { TypeBadge } from '@/components/type-badge';
 import Pokemon3DViewer from '@/components/pokemon-3d-viewer';
 import { PokemonCryButton } from '@/components/pokemon-cry-button';
 import { getArtworkUrl, getModelUrl } from '@/lib/pokemon-assets';
-import { getAllPokemon, getPokemonByName } from '@/lib/pokemon-repository';
-import { ChevronRight } from 'lucide-react';
+import { EvolutionChain, getEvolutionTree } from '@/components/evolution-chain';
+import { getAllPokemon, getPokemonBySlug } from '@/lib/pokemon-repository';
 
 // Re-read Pokémon data from the database at most once a minute.
 export const revalidate = 60;
 
-function EvolutionCard({ pokemon }: { pokemon: Pokemon }) {
-    return (
-        <Link href={`/pokemon/${pokemon.name.toLowerCase()}`} className="group block">
-            <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
-                <CardContent className="p-4 flex items-center gap-4">
-                    <div className="relative h-16 w-16 shrink-0">
-                        <Image
-                            src={getArtworkUrl(pokemon.id)}
-                            alt={pokemon.name}
-                            fill
-                            sizes="64px"
-                            className="object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
-                    </div>
-                    <div>
-                        <p className="text-sm font-medium text-muted-foreground">#{String(pokemon.id).padStart(4, '0')}</p>
-                        <h3 className="text-lg font-bold capitalize text-primary">{pokemon.name}</h3>
-                    </div>
-                </CardContent>
-            </Card>
-        </Link>
-    );
-}
-
-// Returns the evolution family grouped by stage, so branching evolutions
-// (e.g. Eevee -> Vaporeon / Jolteon / Flareon) are all shown.
-function getEvolutionStages(pokemon: Pokemon, allPokemon: Pokemon[]): Pokemon[][] {
-    let root = pokemon;
-    while (root.previousEvolution) {
-        const prev = allPokemon.find(p => p.id === root.previousEvolution!.id);
-        if (!prev) break;
-        root = prev;
-    }
-
-    const stages: Pokemon[][] = [];
-    let current: Pokemon[] = [root];
-    while (current.length > 0) {
-        stages.push(current);
-        current = current
-            .flatMap(p => p.evolutions ?? [])
-            .map(evo => allPokemon.find(p => p.id === evo.id))
-            .filter((p): p is Pokemon => p !== undefined);
-    }
-    return stages;
-}
-
-
 export default async function PokemonPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
-  const pokemon = await getPokemonByName(name);
+  const pokemon = await getPokemonBySlug(name);
 
   if (!pokemon) {
     notFound();
@@ -73,7 +24,7 @@ export default async function PokemonPage({ params }: { params: Promise<{ name: 
   
   const maxStat = 255; 
 
-  const evolutionStages = getEvolutionStages(pokemon, await getAllPokemon());
+  const evolutionTree = getEvolutionTree(pokemon, await getAllPokemon());
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -112,22 +63,11 @@ export default async function PokemonPage({ params }: { params: Promise<{ name: 
               </CardContent>
             </Card>
 
-            {evolutionStages.length > 1 && (
+            {evolutionTree && (
                 <Card>
                     <CardHeader><CardTitle>Evolution Chain</CardTitle></CardHeader>
                     <CardContent>
-                        <div className="flex flex-wrap items-center gap-4">
-                            {evolutionStages.map((stage, index) => (
-                                <React.Fragment key={stage[0].id}>
-                                    <div className="flex w-full flex-col gap-4 sm:w-auto sm:flex-1 min-w-[200px]">
-                                        {stage.map(evo => <EvolutionCard key={evo.id} pokemon={evo} />)}
-                                    </div>
-                                    {index < evolutionStages.length - 1 && (
-                                        <ChevronRight className="hidden h-8 w-8 text-muted-foreground sm:block" />
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </div>
+                        <EvolutionChain tree={evolutionTree} currentId={pokemon.id} />
                     </CardContent>
                 </Card>
             )}
@@ -185,6 +125,6 @@ export default async function PokemonPage({ params }: { params: Promise<{ name: 
 export async function generateStaticParams() {
   const allPokemon = await getAllPokemon();
   return allPokemon.map(pokemon => ({
-    name: pokemon.name.toLowerCase(),
+    name: getPokemonSlug(pokemon.name),
   }));
 }
